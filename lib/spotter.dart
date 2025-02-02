@@ -36,9 +36,7 @@ class Spotter {
     _logFile = File('${directory.path}/app_logs.txt');
     if (!(await _logFile.exists())) {
       out.log("create");
-      await _logFile.create().catchError((onError) {
-        out.log(onError);
-      });
+      await _logFile.create();
     }
   }
   void _startSession({String? customId}) {

@@ -3,12 +3,12 @@
 import 'package:intl/intl.dart';
 import 'package:logs_spotter/logs_spotter.dart';
 
-String CLICK = "CLICK";
-String ERROR = "ERROR";
-String WARNING = "WARNING";
-String DEBUG = "DEBUG";
-String REQUEST = "REQUEST";
-String RESPONSE = "RESPONSE";
+String click = "CLICK";
+String error = "ERROR";
+String warning = "WARNING";
+String debug = "DEBUG";
+String request = "REQUEST";
+String response = "RESPONSE";
 
 
 // Model for a log entry
