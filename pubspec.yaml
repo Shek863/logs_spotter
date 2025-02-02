@@ -1,6 +1,6 @@
 name: logs_spotter
 description: "Open source log engine plugin for Flutter"
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/Shek863/logs_spotter
 
 environment:
