@@ -1,7 +1,7 @@
 import 'dart:developer' as out;
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:logs_spotter/utils.dart';
+import 'package:logs_spotter/src/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Spotter {
@@ -17,9 +17,22 @@ class Spotter {
   bool _enableWriteToFile = true;
   SpotterSession? _currentSession;
 
-  Future<void> start({String? customId, bool writeToFile = true}) async {
+
+
+
+  Future<void> start({
+    /// @Params: custom app, device or user identifier
+    /// Ex : 518739839
+    String? customId,
+    /// @Params: file name
+    /// Ex : app_logs
+    String fileName = "",
+    /// @Params: enable in file writing
+    /// Ex : true
+    bool writeToFile = true,
+  }) async {
     _enableWriteToFile = writeToFile;
-    if (writeToFile) _initFile();
+    if (writeToFile) _initFile(fileName);
     _startSession(customId: customId);
   }
 
@@ -30,10 +43,11 @@ class Spotter {
   }
 
 
-  void _initFile() async {
+  void _initFile(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     out.log("Path: $directory");
-    _logFile = File('${directory.path}/app_logs.txt');
+    _logFile = File(
+        '${directory.path}/${fileName.isEmpty?defaultFileName:fileName}.txt');
     if (!(await _logFile.exists())) {
       out.log("create");
       await _logFile.create();

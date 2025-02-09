@@ -1,3 +1,4 @@
 library logs_spotter;
 
-export 'spotter.dart';
+export 'src/spotter.dart';
+export 'src/utils.dart';

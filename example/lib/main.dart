@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:logs_spotter/logs_spotter.dart';
-import 'package:logs_spotter/spotter.dart';
-import 'package:logs_spotter/utils.dart';
 
 void main() async  {
   WidgetsFlutterBinding.ensureInitialized();

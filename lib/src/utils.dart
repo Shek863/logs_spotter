@@ -2,7 +2,12 @@
 // Enum for log types
 import 'package:intl/intl.dart';
 import 'package:logs_spotter/logs_spotter.dart';
+import 'package:logs_spotter/src/spotter.dart';
 
+///  Const
+const defaultFileName = "app_logs";
+
+///
 String click = "CLICK";
 String error = "ERROR";
 String warning = "WARNING";
