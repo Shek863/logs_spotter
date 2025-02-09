@@ -1,5 +1,7 @@
 
 // Enum for log types
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:logs_spotter/logs_spotter.dart';
 import 'package:logs_spotter/src/spotter.dart';
@@ -19,18 +21,22 @@ String response = "RESPONSE";
 // Model for a log entry
 class SpotEntry {
   final String message;
-  late DateTime? timestamp;
+  late DateTime dateTime;
   final String? tag;
 
   SpotEntry(this.message,
       {this.tag}){
-    timestamp = DateTime.now();
+    dateTime = DateTime.now();
   }
 
   @override
   String toString() {
     return
-      '$timestamp ${''.padLeft(2)} : ${tag != null ? '[$tag] ' : ''}$message';
+      '$dateTime  : ${tag != null ? '[$tag] ' : ''}$message';
+  }
+
+  Map<String, dynamic> toJson() {
+    return { 'message': message, 'tag': tag, 'dateTime': dateTime.toString()};
   }
 
 }
@@ -63,6 +69,38 @@ class SpotterSession {
 
     return '$sessionHeader$eventLogs';
   }
+}
+
+Future<String> provideDefaultId() async {
+
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  if (kIsWeb) {
+    WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+    return webBrowserInfo.browserName.name;
+  }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.model;
+    case TargetPlatform.iOS:
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.model;
+    case TargetPlatform.macOS:
+      MacOsDeviceInfo macOsInfo = await deviceInfo.macOsInfo;
+      return macOsInfo.model;
+    case TargetPlatform.windows:
+      WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+      return windowsInfo.deviceId;
+    case TargetPlatform.linux:
+      LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
+      return linuxInfo.name;
+    default:
+      throw UnsupportedError(
+        'DefaultFirebaseOptions are not supported for this platform.',
+      );
+  }
+
 }
 
 extension Logger on String {
