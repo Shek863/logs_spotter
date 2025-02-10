@@ -15,7 +15,7 @@ class Spotter {
     return _instance;
   }
 
-  Future<void> start({
+  Future<void> initializeEngine({
     /// @Params: custom app, device or user identifier
     /// Ex : 518739839
     String? customId,

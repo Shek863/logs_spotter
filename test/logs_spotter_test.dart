@@ -5,6 +5,6 @@ import 'package:logs_spotter/logs_spotter.dart';
 void main() {
   test('adds one to input values', () {
     final spotter = Spotter();
-    expect(spotter.start(), 3);
+    expect(spotter.initializeEngine(), 3);
   });
 }

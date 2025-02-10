@@ -4,7 +4,7 @@ import 'package:logs_spotter/logs_spotter.dart';
 void main() async  {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Spotter().start();
+  await Spotter().initializeEngine();
   runApp(const MyApp());
 }
 
