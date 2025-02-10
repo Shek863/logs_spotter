@@ -13,7 +13,7 @@ Open source log engine plugin for Flutter
 Add the following to your "pubspec.yaml" file:
 
 ```yaml
-  logs_spotter: ^0.1.0
+  logs_spotter: ^0.0.3
 ```
 
 ## Usage
