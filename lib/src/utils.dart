@@ -10,29 +10,58 @@ import 'package:logs_spotter/src/spotter.dart';
 const defaultFileName = "app_logs";
 
 ///
-String click = "CLICK";
-String error = "ERROR";
-String warning = "WARNING";
-String debug = "DEBUG";
-String request = "REQUEST";
-String response = "RESPONSE";
+const String click = "CLICK";
+const String error = "ERROR";
+const String warning = "WARNING";
+const String debug = "DEBUG";
+const String request = "REQUEST";
+const String response = "RESPONSE";
+
+String icon(tag) {
+  switch(tag){
+    case click:
+      return "🖱️";
+
+    case error:
+      return "🚨";
+
+    case warning:
+      return "🚧";
+
+    case debug:
+      return "🐞";
+
+    case request:
+      return "📤";
+
+    case response:
+      return "📥";
+
+      default:
+        return "🐛";
+}
+}
 
 
 // Model for a log entry
 class SpotEntry {
   final String message;
   late DateTime dateTime;
-  final String? tag;
+  late String? tag;
 
   SpotEntry(this.message,
       {this.tag}){
+    tag = tag ?? debug;
     dateTime = DateTime.now();
   }
 
+
+
   @override
   String toString() {
-    return
-      '$dateTime  : ${tag != null ? '[$tag] ' : ''}$message';
+    return '::: spot ::: $dateTime ::: ${ icon(tag) } :::'
+        '\n$message'
+        '\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::';
   }
 
   Map<String, dynamic> toJson() {
