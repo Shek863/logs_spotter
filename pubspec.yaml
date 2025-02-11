@@ -1,5 +1,6 @@
 name: logs_spotter
-description: "Open source log engine plugin for Flutter"
+description: "Spotter is a open source log engine plugin for Flutter. 
+There allow developer to see what happen whenever or remotely debug their application"
 version: 0.0.3
 homepage: https://github.com/Shek863/logs_spotter
 
@@ -11,15 +12,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  path_provider: ^2.1.4
+  path_provider: ^2.1.5
   device_info_plus: ^11.3.0
-  intl: ^0.19.0
-  intl_utils: ^2.8.7
+  intl: ^0.20.2
+  intl_utils: ^2.8.9
 
   ### Google
-  firebase_core: ^2.20.0
-  cloud_firestore: ^4.17.5
-  firebase_database: ^10.5.7
+  firebase_core: ^3.11.0
+  cloud_firestore: ^5.6.3
+  firebase_database: ^11.3.2
 
 dev_dependencies:
   flutter_test:

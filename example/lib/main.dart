@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:logs_spotter/logs_spotter.dart';
 
-void main() async  {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Spotter().initializeEngine();
+  await Spotter().initializeEngine(writeToFirebase: false);
   runApp(const MyApp());
 }
 
@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     "incrementCounter: $_counter".spot(tag: click);
   }
+
   @override
   void initState() {
     "initState".spot(tag: "HomePage");

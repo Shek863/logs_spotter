@@ -1,4 +1,3 @@
-
 // Enum for log types
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -6,19 +5,25 @@ import 'package:intl/intl.dart';
 import 'package:logs_spotter/logs_spotter.dart';
 import 'package:logs_spotter/src/spotter.dart';
 
-///  Const
+/// local writing default file name
 const defaultFileName = "app_logs";
 
-///
+/// DEFAULT_LOG_TAG for ui click event. Icon: 🖱️
 const String click = "CLICK";
+/// DEFAULT_LOG_TAG for error. Icon: 🚨
 const String error = "ERROR";
+/// DEFAULT_LOG_TAG for warning. Icon: 🚧
 const String warning = "WARNING";
+/// DEFAULT_LOG_TAG for debug. Icon: 🐞
 const String debug = "DEBUG";
+/// DEFAULT_LOG_TAG for api or public method request event. Icon: 📤
 const String request = "REQUEST";
+/// DEFAULT_LOG_TAG for api or public method response event. Icon: 📥
 const String response = "RESPONSE";
 
+/// Package internal methode to determine emoji from log tag
 String icon(tag) {
-  switch(tag){
+  switch (tag) {
     case click:
       return "🖱️";
 
@@ -37,55 +42,59 @@ String icon(tag) {
     case response:
       return "📥";
 
-      default:
-        return "🐛";
-}
+    default:
+      return "🐛";
+  }
 }
 
-
-// Model for a log entry
+/// Model for a log entry
 class SpotEntry {
+  /// log content
   final String message;
+  /// log time
   late DateTime dateTime;
+  /// log TAG
   late String? tag;
 
-  SpotEntry(this.message,
-      {this.tag}){
+  /// Model constructor
+  SpotEntry(this.message, {this.tag}) {
     tag = tag ?? debug;
     dateTime = DateTime.now();
   }
 
-
-
   @override
   String toString() {
-    return '::: spot ::: $dateTime ::: ${ icon(tag) } :::'
+    return '::: spot ::: $dateTime ::: ${icon(tag)} :::'
         '\n$message'
         '\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::';
   }
 
+  /// Convert Model [SpotEntry] object to Map<String, dynamic>
   Map<String, dynamic> toJson() {
-    return { 'message': message, 'tag': tag, 'dateTime': dateTime.toString()};
+    return {'message': message, 'tag': tag, 'dateTime': dateTime.toString()};
   }
-
 }
 
-// Model for a session, containing multiple log entries
+/// Model for a session, containing multiple log entries
 class SpotterSession {
+  /// Session identifier
   final int sessionId;
+  ///
   final String customId;
+  /// log entry list
   final List<SpotEntry> entries = [];
 
-  SpotterSession(
-      {required this.sessionId, required this.customId });
+  /// Model constructor
+  SpotterSession({required this.sessionId, required this.customId});
 
+  /// Add entry to list [entries]
   void addEntry(SpotEntry entry) {
     entries.add(entry);
   }
 
+  /// Print all session to [String]
   String formatSession() {
-    final loginTimeFormatted =
-    DateFormat('yyyy-MM-dd HH:mm:ss.SSS')
+    final loginTimeFormatted = DateFormat('yyyy-MM-dd HH:mm:ss.SSS')
         .format(DateTime.fromMillisecondsSinceEpoch(sessionId));
     final sessionHeader = '\n\n'
         '┌────────────── New Session ────────────────┐\n│ '
@@ -100,8 +109,10 @@ class SpotterSession {
   }
 }
 
-Future<String> provideDefaultId() async {
 
+/// Package internal method to create a default [customId] even there are
+/// [null] on [Spotter().initializeEngine()]
+Future<String> provideDefaultId() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
   if (kIsWeb) {
@@ -129,13 +140,14 @@ Future<String> provideDefaultId() async {
         'DefaultFirebaseOptions are not supported for this platform.',
       );
   }
-
 }
 
+/// [String] Extension to log
+/// Note: [SpotEntry.message] equal ;
 extension Logger on String {
 
+  /// Log Action method
   void spot({String? tag}) {
-   Spotter().log(SpotEntry( this, tag: tag));
+    Spotter().log(SpotEntry(this, tag: tag));
   }
-
 }
