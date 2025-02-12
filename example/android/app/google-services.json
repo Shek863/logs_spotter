@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "778352522121",
+    "firebase_url": "https://agentk-980c8.firebaseio.com",
+    "project_id": "agentk-980c8",
+    "storage_bucket": "agentk-980c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778352522121:android:a00df5d4633055f03b6758",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778352522121-q6osfle1a526o021aeu8k7f63hmenknf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsGsmhY9IN1SwlwoGQlKev1U7R8ax_6IE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778352522121-q6osfle1a526o021aeu8k7f63hmenknf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778352522121:android:37364004bc0a9bca3b6758",
+        "android_client_info": {
+          "package_name": "shek.code.agentk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778352522121-v12ms3eobjli8l08hic0rrc3h17qeg63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "shek.code.agentk",
+            "certificate_hash": "f8cbbeec87c39658ffad29b94b464f3decdff90f"
+          }
+        },
+        {
+          "client_id": "778352522121-q6osfle1a526o021aeu8k7f63hmenknf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsGsmhY9IN1SwlwoGQlKev1U7R8ax_6IE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778352522121-q6osfle1a526o021aeu8k7f63hmenknf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

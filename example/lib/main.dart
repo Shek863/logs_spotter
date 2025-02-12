@@ -1,10 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:logs_spotter/logs_spotter.dart';
+
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Spotter().initializeEngine(writeToFirebase: false);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await Spotter().initializeEngine(
+      writeToFirebase: true,
+      customId: "spotter_example_emulator_1024020"
+  );
   runApp(const MyApp());
 }
 

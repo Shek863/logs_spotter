@@ -22,14 +22,22 @@ class Spotter {
   ///
   /// [customId] : custom app, device or user identifier Ex : 518739839,
   /// [fileName] : file name Ex : app_logs,
-  /// [writeToFile] : enable in file writing Ex : true,
-  /// [writeToFirebase] : enable remote writing [Firebase] Ex : false,
+  /// [writeToConsole] : enable in console writing defaultValue : true,
+  /// [writeToFile] : enable in file writing defaultValue : false,
+  /// [writeToFirebase] : enable remote writing [Firebase] defaultValue : false,
   Future<void> initializeEngine({
     String? customId,
     String fileName = "",
-    bool writeToFile = true,
-    bool writeToFirebase = true,
+    bool writeToConsole = true,
+    bool writeToFile = false,
+    bool writeToFirebase = false,
   }) async {
+    String defaultId = await provideDefaultId();
+    _startSession(customId: customId ?? defaultId);
+
+    // Console initialisation
+    _enableWriteToConsole = writeToConsole;
+
     // local initialisation [File]
     _enableWriteToFile = writeToFile;
     if (writeToFile) _initFile(fileName);
@@ -38,8 +46,6 @@ class Spotter {
     _enableWriteToFirebase = writeToFirebase;
     if (writeToFirebase) _initFirebase();
 
-    String defaultId = await provideDefaultId();
-    _startSession(customId: customId ?? defaultId);
   }
 
   SpotterSession? _currentSession;
@@ -48,9 +54,13 @@ class Spotter {
         sessionId: DateTime.timestamp().millisecondsSinceEpoch,
         customId: "$customId");
     _currentSession = newSession;
+  }
 
-    // Write session header to the file
-    _writeToFile(newSession.formatSession());
+  // console
+  bool _enableWriteToConsole = true;
+  void _writeToConsole(String content) {
+    if (!_enableWriteToConsole) return;
+    out.log(content);
   }
 
   // local
@@ -58,33 +68,50 @@ class Spotter {
   bool _enableWriteToFile = true;
   void _initFile(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
-    out.log("Path: $directory");
     _logFile = File(
         '${directory.path}/${fileName.isEmpty ? defaultFileName : fileName}.txt');
     if (!(await _logFile.exists())) {
-      out.log("create");
       await _logFile.create();
     }
-  }
 
+    // Write session header to the file
+    _writeToFile(_currentSession!.formatSession());
+  }
   void _writeToFile(String content) {
     if (kIsWeb) return;
     if (!_enableWriteToFile) return;
     _logFile.writeAsStringSync('$content\n', mode: FileMode.append);
   }
 
-  // remote
+  // remote: Firebase
   bool _enableWriteToFirebase = true;
-  final _dbInstanceDevices = FirebaseFirestore.instance
-      .collection("spotter")
-      .doc("data")
-      .collection('devices');
+  bool _observe = false;
+  final _dbInstanceDevices = FirebaseFirestore.instance.collection("spotter")
+      .doc("data").collection('devices');
   void _initFirebase() async {
     await Firebase.initializeApp();
-  }
+    // listen when we are enable to observe
+    // This will reduce firebase costs
+    _dbInstanceDevices.doc(_currentSession?.customId)
+        .snapshots().listen((snapshot){
+          _observe = snapshot.data()==null? false: snapshot.data()!["observe"] ?? false;
+        });
 
+    // Write session header to firebase
+    SpotEntry initialLog = SpotEntry("initial log");
+    await _dbInstanceDevices
+        .doc(_currentSession?.customId)
+        .collection('spots')
+        .doc(initialLog.dateTime.millisecondsSinceEpoch.toString())
+        .set(initialLog.toJson(), SetOptions(merge: true));
+    // set session observe to false (default value)
+    await _dbInstanceDevices
+        .doc(_currentSession?.customId)
+        .set({'observe': false}, SetOptions(merge: true));
+  }
   void _writeToFirebase(SpotEntry spotEntry) async {
     if (!_enableWriteToFirebase) return;
+    if (!_observe) return;
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
         .collection('spots')
@@ -92,13 +119,16 @@ class Spotter {
         .set(spotEntry.toJson(), SetOptions(merge: true));
   }
 
+
+
+
   /// Spotter log
   ///
   void log(SpotEntry spotEntry) async {
     _currentSession?.addEntry(spotEntry);
 
     /// show on console
-    out.log(spotEntry.toString());
+    _writeToConsole(spotEntry.toString());
 
     /// save in file
     _writeToFile(spotEntry.toString());
@@ -109,6 +139,6 @@ class Spotter {
 
   /// Helper method. Do not use for file-based logs
   void displaySession() {
-    out.log(_currentSession!.formatSession());
+    _writeToConsole(_currentSession!.formatSession());
   }
 }
