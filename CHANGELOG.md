@@ -1,6 +1,13 @@
+## 0.0.4
+
+* Integrate dart analysis warning
+* Add observe mode to firebase
+
 ## 0.0.3
 
-* enable github action
+* Add style to console logs
+* New engine: firebase
+* Make file writing optional with new params
 
 ## 0.0.2
 
