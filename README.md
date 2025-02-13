@@ -1,6 +1,7 @@
 # logs_spotter
 
-Open source log engine plugin for Flutter
+Spotter is a open source log engine plugin for Flutter.
+There allow developer to see what happen whenever or remotely debug their application
 
 <p align="center">
 <a href="https://pub.dev/packages/logs_spotter"><img src="https://img.shields.io/pub/v/logs_spotter.svg" alt="version"></a>
