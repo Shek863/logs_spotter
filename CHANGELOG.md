@@ -2,6 +2,7 @@
 
 * Integrate dart analysis warning
 * Add observe mode to firebase
+* Update logs on console style
 
 ## 0.0.3
 
