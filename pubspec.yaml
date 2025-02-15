@@ -16,6 +16,7 @@ dependencies:
   device_info_plus: ^11.3.0
   intl: ^0.20.2
   intl_utils: ^2.8.9
+  ansicolor: ^2.0.3
 
   ### Google
   firebase_core: ^3.11.0

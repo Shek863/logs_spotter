@@ -80,12 +80,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-    "incrementCounter: $_counter".spot(tag: click);
+    "incrementCounter: $_counter".c.spot();
+    "incrementCounter: $_counter".f.spot();
+    "incrementCounter: $_counter".i.spot();
+    "incrementCounter: $_counter".w.spot();
+    "incrementCounter: $_counter".e.spot();
   }
 
   @override
   void initState() {
-    "initState".spot(tag: "HomePage");
+    "initState".i.spot();
     super.initState();
   }
 

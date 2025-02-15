@@ -1,9 +1,7 @@
 // Enum for log types
+import 'package:ansicolor/ansicolor.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
-import 'package:logs_spotter/logs_spotter.dart';
-import 'package:logs_spotter/src/spotter.dart';
 
 /// local writing default file name
 const defaultFileName = "app_logs";
@@ -47,68 +45,20 @@ String icon(tag) {
   }
 }
 
-/// Model for a log entry
-class SpotEntry {
-  /// log content
-  final String message;
-  /// log time
-  late DateTime dateTime;
-  /// log TAG
-  late String? tag;
-
-  /// Model constructor
-  SpotEntry(this.message, {this.tag}) {
-    tag = tag ?? debug;
-    dateTime = DateTime.now();
-  }
-
-  @override
-  String toString() {
-    return '::: spot ::: $dateTime ::: ${icon(tag)} :::'
-        '\n$message'
-        '\n::::::::::::::::::::::::::::::::::::::::::::::::::::::::';
-  }
-
-  /// Convert Model [SpotEntry] object to Map<String, dynamic>
-  Map<String, dynamic> toJson() {
-    return {'message': message, 'tag': tag, 'dateTime': dateTime.toString()};
-  }
-}
-
-/// Model for a session, containing multiple log entries
-class SpotterSession {
-  /// Session identifier
-  final int sessionId;
-  ///
-  final String customId;
-  /// log entry list
-  final List<SpotEntry> entries = [];
-
-  /// Model constructor
-  SpotterSession({required this.sessionId, required this.customId});
-
-  /// Add entry to list [entries]
-  void addEntry(SpotEntry entry) {
-    entries.add(entry);
-  }
-
-  /// Print all session to [String]
-  String formatSession() {
-    final loginTimeFormatted = DateFormat('yyyy-MM-dd HH:mm:ss.SSS')
-        .format(DateTime.fromMillisecondsSinceEpoch(sessionId));
-    final sessionHeader = '\n\n'
-        '┌────────────── New Session ────────────────┐\n│ '
-        'Session ID: $sessionId\n│ '
-        'User: $customId\n│ '
-        'Login Time: $loginTimeFormatted\n'
-        '└───────────────────────────────────────────┘';
-
-    final eventLogs = entries.map((e) => e.toString()).join('\n\n');
-
-    return '$sessionHeader$eventLogs';
-  }
-}
-
+/// DEFAULT_AnsiPen color (white) for console style
+AnsiPen penClick = AnsiPen()..white();
+/// DEFAULT_AnsiPen color (white) for console style
+AnsiPen penAPIResponse = AnsiPen()..white();
+/// DEFAULT_AnsiPen color (white) for console style
+AnsiPen penAPIRequest = AnsiPen()..white();
+/// DEFAULT_AnsiPen color (white) for console style
+AnsiPen penInfo = AnsiPen()..white();
+/// DEFAULT_AnsiPen color (red) for console style
+AnsiPen penError = AnsiPen()..red();
+/// DEFAULT_AnsiPen color (green) for console style
+AnsiPen penFine = AnsiPen()..green();
+/// DEFAULT_AnsiPen color (yellow) console style
+AnsiPen penWarning = AnsiPen()..yellow();
 
 /// Package internal method to create a default [customId] even there are
 /// [null] on [Spotter().initializeEngine()]
@@ -139,15 +89,5 @@ Future<String> provideDefaultId() async {
       throw UnsupportedError(
         'DefaultFirebaseOptions are not supported for this platform.',
       );
-  }
-}
-
-/// [String] Extension to log
-/// Note: [SpotEntry.message] equal ;
-extension Logger on String {
-
-  /// Log Action method
-  void spot({String? tag}) {
-    Spotter().log(SpotEntry(this, tag: tag));
   }
 }

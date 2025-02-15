@@ -1,9 +1,11 @@
-import 'dart:developer' as out;
+import 'dart:async';
 import 'dart:io';
+import 'package:ansicolor/ansicolor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logs_spotter/src/utils.dart';
+import 'package:logs_spotter/src/utils/models.dart';
+import 'package:logs_spotter/src/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Spotter
@@ -60,7 +62,8 @@ class Spotter {
   bool _enableWriteToConsole = true;
   void _writeToConsole(String content) {
     if (!_enableWriteToConsole) return;
-    out.log(content);
+    ansiColorDisabled = false;
+    debugPrint(penInfo(content));
   }
 
   // local
@@ -86,10 +89,12 @@ class Spotter {
   // remote: Firebase
   bool _enableWriteToFirebase = true;
   bool _observe = false;
-  final _dbInstanceDevices = FirebaseFirestore.instance.collection("spotter")
-      .doc("data").collection('devices');
+  dynamic _dbInstanceDevices ;
   void _initFirebase() async {
     await Firebase.initializeApp();
+    _dbInstanceDevices = FirebaseFirestore.instance.collection("spotter")
+        .doc("data").collection('devices');
+
     // listen when we are enable to observe
     // This will reduce firebase costs
     _dbInstanceDevices.doc(_currentSession?.customId)
@@ -128,7 +133,7 @@ class Spotter {
     _currentSession?.addEntry(spotEntry);
 
     /// show on console
-    _writeToConsole(spotEntry.toString());
+    _writeToConsole(spotEntry.toAnsiPen());
 
     /// save in file
     _writeToFile(spotEntry.toString());
