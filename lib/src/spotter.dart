@@ -33,6 +33,7 @@ class Spotter {
     bool writeToConsole = true,
     bool writeToFile = false,
     bool writeToFirebase = false,
+    bool exportLocalBeforeRemoteObserve = false,
   }) async {
     String defaultId = await provideDefaultId();
     _startSession(customId: customId ?? defaultId);
@@ -42,12 +43,11 @@ class Spotter {
 
     // local initialisation [File]
     _enableWriteToFile = writeToFile;
-    if (writeToFile) _initFile(fileName);
+    if (writeToFile) await _initFile(fileName);
 
     // remote initialisation [Firebase]
     _enableWriteToFirebase = writeToFirebase;
     if (writeToFirebase) _initFirebase();
-
   }
 
   SpotterSession? _currentSession;
@@ -69,7 +69,7 @@ class Spotter {
   // local
   late File _logFile;
   bool _enableWriteToFile = true;
-  void _initFile(String fileName) async {
+  Future _initFile(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     _logFile = File(
         '${directory.path}/${fileName.isEmpty ? defaultFileName : fileName}.txt');
@@ -77,9 +77,10 @@ class Spotter {
       await _logFile.create();
     }
 
-    // Write session header to the file
-    _writeToFile(_currentSession!.formatSession());
+    /// Write session header to the file
+    ///_writeToFile(_currentSession!.formatSession());
   }
+
   void _writeToFile(String content) {
     if (kIsWeb) return;
     if (!_enableWriteToFile) return;
@@ -89,18 +90,29 @@ class Spotter {
   // remote: Firebase
   bool _enableWriteToFirebase = true;
   bool _observe = false;
-  dynamic _dbInstanceDevices ;
+  dynamic _dbInstanceDevices;
   void _initFirebase() async {
     await Firebase.initializeApp();
-    _dbInstanceDevices = FirebaseFirestore.instance.collection("spotter")
-        .doc("data").collection('devices');
+    _dbInstanceDevices = FirebaseFirestore.instance
+        .collection("spotter")
+        .doc("data")
+        .collection('devices');
 
     // listen when we are enable to observe
     // This will reduce firebase costs
-    _dbInstanceDevices.doc(_currentSession?.customId)
-        .snapshots().listen((snapshot){
-          _observe = snapshot.data()==null? false: snapshot.data()!["observe"] ?? false;
-        });
+    _dbInstanceDevices
+        .doc(_currentSession?.customId)
+        .snapshots()
+        .listen((snapshot) async {
+      if (snapshot.data() == null) {
+        _observe = false;
+        return;
+      }
+      _observe = snapshot.data()!["observe"] ?? false;
+      if (snapshot.data()!["observe"] ?? false) {
+        await _exporter();
+      }
+    });
 
     // Write session header to firebase
     SpotEntry initialLog = SpotEntry("initial log");
@@ -114,6 +126,31 @@ class Spotter {
         .doc(_currentSession?.customId)
         .set({'observe': false}, SetOptions(merge: true));
   }
+
+  Future _exporter() async {
+    String content = await _logFile.readAsString();
+    List<String> spots = content.split("-> spot");
+    debugPrint("_exporter::spots::${spots.length}");
+    for (int i = 0; i < spots.length; i++) {
+      debugPrint("_exporter::spots$i::${spots[i]}");
+      debugPrint("_exporter::spots$i::${spots[i].split(" ::: ").length}");
+      if (spots[i].split(" ::: ").length >= 4) {
+        String msg = spots[i].split(" ::: ")[4];
+        String lvl = spots[i].split(" ::: ")[1];
+        String dt = spots[i].split(" ::: ")[2];
+        String tg = spots[i].split(" ::: ")[3];
+
+        SpotEntry spotEntry =
+            SpotEntry.reload(msg, tag: tg, level: lvl, dateTime: dt);
+        await _dbInstanceDevices
+            .doc(_currentSession?.customId)
+            .collection('spots')
+            .doc(spotEntry.dateTime.millisecondsSinceEpoch.toString())
+            .set(spotEntry.toJson(), SetOptions(merge: true));
+      }
+    }
+  }
+
   void _writeToFirebase(SpotEntry spotEntry) async {
     if (!_enableWriteToFirebase) return;
     if (!_observe) return;
@@ -123,9 +160,6 @@ class Spotter {
         .doc(spotEntry.dateTime.millisecondsSinceEpoch.toString())
         .set(spotEntry.toJson(), SetOptions(merge: true));
   }
-
-
-
 
   /// Spotter log
   ///

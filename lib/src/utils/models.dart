@@ -1,78 +1,89 @@
 // Enum for log types
 import 'package:ansicolor/ansicolor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:logs_spotter/logs_spotter.dart';
+
+import '../../logs_spotter.dart';
 
 /// Model for a log entry
 class SpotEntry {
   /// log content
   final String message;
+
   /// log level
   late String? level;
+
   /// log time
   late DateTime dateTime;
+
   /// log TAG
   late String? tag;
 
   /// Model constructor
-  SpotEntry(this.message, {this.tag,this.level}) {
+  SpotEntry(this.message, {this.tag, this.level}) {
     level = level ?? debug;
-    tag = tag;
     dateTime = DateTime.now();
+  }
+
+  /// Model constructor
+  SpotEntry.reload(this.message, {this.tag, this.level, String dateTime = ""}) {
+    debugPrint("_exporter::spots::dateTime::$dateTime");
+    var date = DateTime.parse(dateTime
+            .replaceAll(" ", "T")
+            .substring(0, 24)
+            .replaceRange(23, 24, 'Z'))
+        .toLocal();
+    this.dateTime = date;
   }
 
   @override
   String toString() {
-    return
-          '-> spot ::: $level ::: $dateTime ::: '
-          '${tag ?? StackTrace.current
-                  .toString().split("#")[4]
-                  .toString().split(" ").last
-                  .replaceAll("\n", "")
-                  .replaceAll("(", "")
-                  .replaceAll(")", "") } \n'
-              '-> ctnt ::: $message';
+    return '-> spot ::: $level ::: $dateTime ::: '
+        '${tag ?? StackTrace.current.toString().split("#")[4].toString().split(" ").last.replaceAll("\n", "").replaceAll("(", "").replaceAll(")", "")} \n'
+        ' ::: $message';
   }
 
   ///
   String toAnsiPen() {
-    final str =  '-> spot ::: $level ::: $dateTime ::: '
-        '${tag ?? StackTrace.current
-        .toString().split("#")[4]
-        .toString().split(" ").last
-        .replaceAll("\n", "")
-        .replaceAll("(", "")
-        .replaceAll(")", "") } \n'
+    final str = '-> spot ::: $level ::: $dateTime ::: '
+        '${tag ?? StackTrace.current.toString().split("#")[4].toString().split(" ").last.replaceAll("\n", "").replaceAll("(", "").replaceAll(")", "")} \n'
         '-> ctnt ::: $message';
 
-    String ansiPen ;
+    String ansiPen;
 
-    switch(level){
-      case "✅ FINE": ansiPen = penFine(str);
+    switch (level) {
+      case "✅ FINE":
+        ansiPen = penFine(str);
         break;
-      case "📢 INFO": ansiPen = penInfo(str);
+      case "📢 INFO":
+        ansiPen = penInfo(str);
         break;
-      case "🚧 WARNING": ansiPen = penWarning(str);
+      case "🚧 WARNING":
+        ansiPen = penWarning(str);
         break;
-      case "🚨 ERROR": ansiPen = penError(str);
-        break;
-
-
-      case "🖱 CLICK": ansiPen = penClick(str);
-        break;
-      case "📤 REQUEST": ansiPen = penAPIRequest(str);
-        break;
-      case "📥 RESPONSE": ansiPen = penAPIResponse(str);
+      case "🚨 ERROR":
+        ansiPen = penError(str);
         break;
 
-      default: ansiPen = penInfo(str);
+      case "🖱 CLICK":
+        ansiPen = penClick(str);
+        break;
+      case "📤 REQUEST":
+        ansiPen = penAPIRequest(str);
+        break;
+      case "📥 RESPONSE":
+        ansiPen = penAPIResponse(str);
+        break;
+
+      default:
+        ansiPen = penInfo(str);
         break;
     }
 
     return ansiPen;
   }
 
-  /// Convert Model [SpotEntry] object to Map<String, dynamic>
+  /// Convert Model [SpotEntry] object to Map
   Map<String, dynamic> toJson() {
     return {
       'level': level,
@@ -87,8 +98,10 @@ class SpotEntry {
 class SpotterSession {
   /// Session identifier
   final int sessionId;
+
   ///
   final String customId;
+
   /// log entry list
   final List<SpotEntry> entries = [];
 

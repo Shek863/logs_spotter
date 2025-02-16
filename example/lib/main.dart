@@ -12,9 +12,9 @@ void main() async {
   );
 
   await Spotter().initializeEngine(
+      writeToFile: true,
       writeToFirebase: true,
-      customId: "spotter_example_emulator_1024020"
-  );
+      customId: "spotter_example_emulator_1024020");
   runApp(const MyApp());
 }
 
