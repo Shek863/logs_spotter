@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Review dependencies constraint
+
 ## 0.0.5
 
 * Export local logs on remote observe
