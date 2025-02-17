@@ -4,8 +4,8 @@ import 'package:ansicolor/ansicolor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logs_spotter/src/utils/models.dart';
-import 'package:logs_spotter/src/utils/utils.dart';
+import '/src/utils/models.dart';
+import '/src/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Spotter
@@ -33,7 +33,7 @@ class Spotter {
     bool writeToConsole = true,
     bool writeToFile = false,
     bool writeToFirebase = false,
-    bool exportLocalBeforeRemoteObserve = false,
+    bool exportLocal = false,
   }) async {
     String defaultId = await provideDefaultId();
     _startSession(customId: customId ?? defaultId);
@@ -47,6 +47,7 @@ class Spotter {
 
     // remote initialisation [Firebase]
     _enableWriteToFirebase = writeToFirebase;
+    _exportLocal = exportLocal;
     if (writeToFirebase) _initFirebase();
   }
 
@@ -89,6 +90,7 @@ class Spotter {
 
   // remote: Firebase
   bool _enableWriteToFirebase = true;
+  bool _exportLocal = false;
   bool _observe = false;
   dynamic _dbInstanceDevices;
   void _initFirebase() async {
@@ -109,7 +111,7 @@ class Spotter {
         return;
       }
       _observe = snapshot.data()!["observe"] ?? false;
-      if (snapshot.data()!["observe"] ?? false) {
+      if ((snapshot.data()!["observe"] ?? false) && _exportLocal) {
         await _exporter();
       }
     });

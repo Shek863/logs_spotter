@@ -1,6 +1,5 @@
 // Enum for log types
 import '../../logs_spotter.dart';
-import 'models.dart';
 
 /// [String] Extension to log
 @Deprecated("Call LogLevel extension before")

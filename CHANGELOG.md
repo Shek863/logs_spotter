@@ -1,3 +1,8 @@
+## 0.0.5
+
+* Export local logs on remote observe
+* Integrate dart analysis warning
+
 ## 0.0.4
 
 * Integrate dart analysis warning

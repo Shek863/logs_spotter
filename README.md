@@ -30,8 +30,10 @@ Call this to configure spotter engine
 <tr><td>Argument</td><td>Type</td><td>Required</td><td>Details</td></tr>
 <tr><td>customId</td><td>String?</td><td>No</td><td>custom app, device or user identifier Ex : 518739839</td></tr>
 <tr><td>fileName</td><td>String</td><td>No</td><td>Local file name</td></tr>
+<tr><td>writeToConsole</td><td>bool</td><td>No</td><td>Show log on console Ex : true</td></tr>
 <tr><td>writeToFile</td><td>bool</td><td>No</td><td>Enable in file writing Ex : true</td></tr>
-<tr><td>writeToFirebase</td><td>bool</td><td>No</td><td>enable remote writing (Firebase) Ex : true</td></tr>
+<tr><td>writeToFirebase</td><td>bool</td><td>No</td><td>Enable remote writing (Firebase) Ex : true</td></tr>
+<tr><td>exportLocal</td><td>bool</td><td>No</td><td>Export local logs on remote observe (Firebase) Ex : true</td></tr>
 </table>
 
 To log messages
