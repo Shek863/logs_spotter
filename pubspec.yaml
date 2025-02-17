@@ -14,8 +14,8 @@ dependencies:
 
   path_provider: ^2.1.5
   device_info_plus: ^11.3.0
-  intl: ^0.20.2
-  intl_utils: ^2.8.9
+  intl: ^0.19.0
+  intl_utils: ^2.7.0
   ansicolor: ^2.0.3
 
   ### Google
