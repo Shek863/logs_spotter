@@ -12,5 +12,6 @@
 <tr><td>6</td><td>Limit log pile max size</td><td>---</td><td>---</td></tr>
 <tr><td>7</td><td>Observe default value changeable</td><td>---</td><td>---</td></tr>
 <tr><td>8</td><td>Correspondence between defaultId and customId or when customId change on same device</td><td>---</td><td>---</td></tr>
+<tr><td>9</td><td>Periodic export</td><td>---</td><td>---</td></tr>
 </table>
 
