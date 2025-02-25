@@ -33,6 +33,7 @@ class Spotter {
     bool writeToConsole = true,
     bool writeToFile = false,
     bool writeToFirebase = false,
+    bool observeAutomatically = false,
     bool exportLocal = false,
   }) async {
     String defaultId = await provideDefaultId();
@@ -47,6 +48,7 @@ class Spotter {
 
     // remote initialisation [Firebase]
     _enableWriteToFirebase = writeToFirebase;
+    _observeAutomatically = observeAutomatically;
     _exportLocal = exportLocal;
     if (writeToFirebase) _initFirebase();
   }
@@ -90,6 +92,7 @@ class Spotter {
 
   // remote: Firebase
   bool _enableWriteToFirebase = true;
+  bool _observeAutomatically = false;
   bool _exportLocal = false;
   bool _observe = false;
   dynamic _dbInstanceDevices;
@@ -111,7 +114,7 @@ class Spotter {
         return;
       }
       _observe = snapshot.data()!["observe"] ?? false;
-      if ((snapshot.data()!["observe"] ?? false) && _exportLocal) {
+      if (((snapshot.data()!["observe"] ?? false)|| _observeAutomatically) && _exportLocal) {
         await _exporter();
       }
     });
@@ -126,7 +129,7 @@ class Spotter {
     // set session observe to false (default value)
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
-        .set({'observe': false}, SetOptions(merge: true));
+        .set({'observe': _observeAutomatically}, SetOptions(merge: true));
   }
 
   Future _exporter() async {
