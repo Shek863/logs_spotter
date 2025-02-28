@@ -33,7 +33,7 @@ class Spotter {
     bool writeToConsole = true,
     bool writeToFile = false,
     bool writeToFirebase = false,
-    bool observeAutomatically = false,
+    bool remoteObserveDefaultValue = false,
     bool exportLocal = false,
   }) async {
     String defaultId = await provideDefaultId();
@@ -48,7 +48,7 @@ class Spotter {
 
     // remote initialisation [Firebase]
     _enableWriteToFirebase = writeToFirebase;
-    _observeAutomatically = observeAutomatically;
+    _observeAutomatically = remoteObserveDefaultValue;
     _exportLocal = exportLocal;
     if (writeToFirebase) _initFirebase();
   }
