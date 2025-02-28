@@ -123,6 +123,9 @@ class Spotter {
     SpotEntry initialLog = SpotEntry("initial log");
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
+        .set(provideDeviceInfo(), SetOptions(merge: true));
+    await _dbInstanceDevices
+        .doc(_currentSession?.customId)
         .collection('spots')
         .doc(initialLog.dateTime.millisecondsSinceEpoch.toString())
         .set(initialLog.toJson(), SetOptions(merge: true));

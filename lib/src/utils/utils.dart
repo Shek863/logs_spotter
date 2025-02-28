@@ -102,3 +102,35 @@ Future<String> provideDefaultId() async {
       );
   }
 }
+
+/// Package internal method to collect more data about device
+///
+Future<Map<String, dynamic>> provideDeviceInfo() async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  if (kIsWeb) {
+    WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+    return webBrowserInfo.data;
+  }
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.data;
+    case TargetPlatform.iOS:
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.data;
+    case TargetPlatform.macOS:
+      MacOsDeviceInfo macOsInfo = await deviceInfo.macOsInfo;
+      return macOsInfo.data;
+    case TargetPlatform.windows:
+      WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+      return windowsInfo.data;
+    case TargetPlatform.linux:
+      LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
+      return linuxInfo.data;
+    default:
+      throw UnsupportedError(
+        'DefaultFirebaseOptions are not supported for this platform.',
+      );
+  }
+}
