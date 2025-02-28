@@ -12,9 +12,14 @@ void main() async {
   );
 
   await Spotter().initializeEngine(
+      fileName: "my_app_logs",
       writeToFile: true,
+      writeToConsole: true,
       writeToFirebase: true,
-      customId: "spotter_example_emulator_1024020");
+      customId: "spotter_example_emulator_1024020",
+      remoteObserveDefaultValue: false,
+      exportLocal: true );
+
   runApp(const MyApp());
 }
 
@@ -70,7 +75,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
+  static const tag = "MyHomePage";
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -80,10 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+    // Log level method : Level.CLICK
     "incrementCounter: $_counter".c.spot();
-    "incrementCounter: $_counter".f.spot();
-    "incrementCounter: $_counter".i.spot();
+   // Log level method : Level.FINE
+    "incrementCounter: $_counter".f.spot(tag: tag);
+    // Log level method : Level.INFO
+    "incrementCounter: $_counter".i.spot(tag: tag);
+    // Log level method : Level.WARNING
     "incrementCounter: $_counter".w.spot();
+    // Log level method : Level.ERROR
     "incrementCounter: $_counter".e.spot();
   }
 

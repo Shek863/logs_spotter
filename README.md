@@ -14,7 +14,7 @@ There allow developer to see what happen whenever or remotely debug their applic
 Add the following to your "pubspec.yaml" file:
 
 ```yaml
-  logs_spotter: ^0.0.6
+  logs_spotter: ^0.1.0-dev.1
 ```
 
 ## Usage
@@ -22,7 +22,14 @@ Add the following to your "pubspec.yaml" file:
 Call this to configure spotter engine
  
 ```dart
-  await Spotter().initializeEngine();
+     await Spotter().initializeEngine(
+fileName: "my_app_logs",
+writeToFile: true,
+writeToConsole: true,
+writeToFirebase: true,
+customId: "spotter_example_emulator_1024020",
+remoteObserveDefaultValue: false,
+exportLocal: true );
 ```
 
 #### initializeEngine() Params descriptions
@@ -34,16 +41,25 @@ Call this to configure spotter engine
 <tr><td>writeToFile</td><td>bool</td><td>No</td><td>Enable in file writing Ex : true</td></tr>
 <tr><td>writeToFirebase</td><td>bool</td><td>No</td><td>Enable remote writing (Firebase) Ex : true</td></tr>
 <tr><td>exportLocal</td><td>bool</td><td>No</td><td>Export local logs on remote observe (Firebase) Ex : true</td></tr>
+<tr><td>remoteObserveDefaultValue</td><td>bool</td><td>No</td><td>set remote writing [Firebase] defaultValue Ex : false</td></tr>
 </table>
 
 To log messages
 
 ```dart
 //To log an message
-  "initState".spot();
+// Log level method : Level.WARNING
+"warningMessage".w.spot();
+// Log level method : Level.ERROR
+"errorMessage".e.spot();
 
 //add TAG
-  "incrementCounter: $_counter".spot(tag: CLICK);
+// Log level method : Level.CLICK
+"incrementCounter: $_counter".c.spot(tag: click);
+// Log level method : Level.FINE
+"goodJob".f.spot(tag: tag);
+// Log level method : Level.INFO
+"yourMessage".i.spot(tag: tag);
 ```
 By default this method write log on console 
 

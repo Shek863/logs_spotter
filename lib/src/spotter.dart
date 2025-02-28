@@ -27,6 +27,7 @@ class Spotter {
   /// [writeToConsole] : enable in console writing defaultValue : true,
   /// [writeToFile] : enable in file writing defaultValue : false,
   /// [writeToFirebase] : enable remote writing [Firebase] defaultValue : false,
+  /// [remoteObserveDefaultValue] : set remote writing [Firebase] defaultValue
   Future<void> initializeEngine({
     String? customId,
     String fileName = "",
