@@ -1,0 +1,2 @@
+/Users/shegunmontcho/StudioProjects/segun/logs_spotter/example/android/app/.cxx/Debug/6o6461os/x86_64/CMakeFiles/edit_cache.dir
+/Users/shegunmontcho/StudioProjects/segun/logs_spotter/example/android/app/.cxx/Debug/6o6461os/x86_64/CMakeFiles/rebuild_cache.dir

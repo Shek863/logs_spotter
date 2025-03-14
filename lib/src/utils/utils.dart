@@ -2,6 +2,7 @@
 import 'package:ansicolor/ansicolor.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// local writing default file name
 const defaultFileName = "app_logs";
@@ -133,4 +134,18 @@ Future<Map<String, dynamic>> provideDeviceInfo() async {
         'DefaultFirebaseOptions are not supported for this platform.',
       );
   }
+}
+
+/// Package internal method to get Application name
+///
+Future<String?> getAppName() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  return  packageInfo.appName;
+}
+
+/// Package internal method to get Application name
+///
+Future<String?> getPackageName() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  return  packageInfo.packageName;
 }

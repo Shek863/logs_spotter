@@ -17,6 +17,7 @@ dependencies:
   intl: ^0.19.0
   intl_utils: ^2.7.0
   ansicolor: ^2.0.3
+  package_info_plus: ^8.3.0
 
   ### Google
   firebase_core: ^3.11.0

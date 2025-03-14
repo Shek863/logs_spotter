@@ -120,20 +120,36 @@ class Spotter {
       }
     });
 
-    // Write session header to firebase
-    SpotEntry initialLog = SpotEntry("initial log");
+    // Write device info to firebase
+    final deviceInfo = await provideDeviceInfo();
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
-        .set(provideDeviceInfo(), SetOptions(merge: true));
+        .set(deviceInfo, SetOptions(merge: true));
+
+    String? appName = await getAppName();
+    String? packageName = await getPackageName();
+    await FirebaseFirestore.instance
+        .collection("spotter").doc("data")
+        .set({'app_package_id': packageName??"",
+      'app_name': appName??"",}, SetOptions(merge: true));
+
+    // Write session header to firebase
+    SpotEntry initialLog = SpotEntry("initial log");
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
         .collection('spots')
         .doc(initialLog.dateTime.millisecondsSinceEpoch.toString())
         .set(initialLog.toJson(), SetOptions(merge: true));
+
+
     // set session observe to false (default value)
     await _dbInstanceDevices
         .doc(_currentSession?.customId)
-        .set({'observe': _observeAutomatically}, SetOptions(merge: true));
+        .set({
+      'observe': _observeAutomatically,
+      'custom_id': _currentSession?.customId,
+    }, SetOptions(merge: true));
+
   }
 
   Future _exporter() async {
