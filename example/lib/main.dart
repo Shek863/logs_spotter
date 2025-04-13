@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:logs_spotter/logs_spotter.dart';
@@ -5,22 +7,16 @@ import 'package:logs_spotter/logs_spotter.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await spotterScope(() async {
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    //custom initialization (optional)
+    await Spotter().initializeEngine( fileName: "my_app_logs",
+        writeToFile: true, writeToConsole: true,
+        writeToFirebase: true, customId: "spotter_example_emulator_1024020" ,
+        remoteObserveDefaultValue:  true, exportLocal: true );
 
-  await Spotter().initializeEngine(
-      fileName: "my_app_logs",
-      writeToFile: true,
-      writeToConsole: true,
-      writeToFirebase: true,
-      customId: "spotter_example_emulator_1024020",
-      remoteObserveDefaultValue: false,
-      exportLocal: true );
-
-  runApp(const MyApp());
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +46,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: null),
     );
   }
 }
@@ -67,7 +63,7 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final String? title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -119,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it

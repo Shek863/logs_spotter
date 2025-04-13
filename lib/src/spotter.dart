@@ -3,10 +3,32 @@ import 'dart:io';
 import 'package:ansicolor/ansicolor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import '/src/utils/models.dart';
-import '/src/utils/utils.dart';
+import 'package:logs_spotter/logs_spotter.dart';
 import 'package:path_provider/path_provider.dart';
+
+
+
+/// runApp overrider
+Future spotterScope(Function() main) async {
+  runZonedGuarded(() async {
+    /// ensure flutter binding initialization
+    WidgetsFlutterBinding.ensureInitialized();
+
+    /// default initialization
+    await Spotter().initializeEngine();
+
+    /// ensure flutter binding initialization
+    FlutterError.onError = (FlutterErrorDetails details) {
+      //FlutterError.presentError(details); // Keeps default red screen
+      details.toString().i.spot();
+    };
+    main();
+  }, (error, stack) {
+    error.toString().e.spot(tag: "runZonedGuarded" );
+  });
+}
 
 /// Spotter
 class Spotter {

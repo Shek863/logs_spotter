@@ -19,7 +19,16 @@ Add the following to your "pubspec.yaml" file:
 
 ## Usage
 
-Call this to configure spotter engine
+You need to encapscul you main code with spotterScope() like this
+This will automatically catch FlutterError
+```dart
+      await spotterScope(() async {
+        runApp(const MyApp());
+      });
+```
+
+You can also specify spotter engine configuration
+Please see a github example 
  
 ```dart
      await Spotter().initializeEngine(
