@@ -25,16 +25,7 @@ Future spotterScope(Function() main) async {
       details.toString().i.spot();
     };
 
-    // Override print within this zone
-    Zone.current.fork(specification: ZoneSpecification(
-      handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
-          Object line, StackTrace trace){
-        line.toString().e.spot();
-      },
-      print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-        line.toString().e.spot();
-      },
-    )).run(main);
+    main();
 
   }, (error, stack) {
     error.toString().e.spot(tag: "runZonedGuarded" );

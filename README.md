@@ -14,7 +14,7 @@ There allow developer to see what happen whenever or remotely debug their applic
 Add the following to your "pubspec.yaml" file:
 
 ```yaml
-  logs_spotter: ^0.1.0-dev.1
+  logs_spotter: ^0.1.2
 ```
 
 ## Usage

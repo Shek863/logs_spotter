@@ -1,3 +1,7 @@
+## 0.1.2
+
+*  Update Readme.md
+
 ## 0.1.1
 
 * Developer can now change a remote observe default value

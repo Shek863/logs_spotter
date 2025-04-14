@@ -339,7 +339,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0-dev.1"
+    version: "0.1.2"
   macros:
     dependency: transitive
     description:
