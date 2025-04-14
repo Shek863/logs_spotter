@@ -24,7 +24,18 @@ Future spotterScope(Function() main) async {
       //FlutterError.presentError(details); // Keeps default red screen
       details.toString().i.spot();
     };
-    main();
+
+    // Override print within this zone
+    Zone.current.fork(specification: ZoneSpecification(
+      handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
+          Object line, StackTrace trace){
+        line.toString().e.spot();
+      },
+      print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+        line.toString().e.spot();
+      },
+    )).run(main);
+
   }, (error, stack) {
     error.toString().e.spot(tag: "runZonedGuarded" );
   });

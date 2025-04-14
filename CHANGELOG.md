@@ -1,3 +1,9 @@
+## 0.1.1
+
+* Developer can now change a remote observe default value
+* Collect more information about device to firebase
+* Catch Flutter runtime Error
+
 ## 0.1.0-dev.1
 
 * Developer can now change a remote observe default value
