@@ -9,6 +9,9 @@ import 'firebase_options.dart';
 void main() async {
   await spotterScope(() async {
 
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions. currentPlatform,);
+
     //custom initialization (optional)
     await Spotter().initializeEngine( fileName: "my_app_logs",
         writeToFile: true, writeToConsole: true,

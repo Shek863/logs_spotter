@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Review dependencies constraint
+
 ## 0.1.2
 
 *  Update Readme.md
